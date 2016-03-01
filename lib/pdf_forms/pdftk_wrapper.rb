@@ -40,7 +40,7 @@ module PdfForms
       fill_options = {:tmp_path => tmp.path}.merge(fill_options)
 
       args = [ q_template, 'fill_form', normalize_path(tmp.path), 'output', q_destination ]
-      append_options args, fill_options
+      args = append_options args, fill_options
       result = call_pdftk *args
 
       unless File.readable?(destination) && File.size(destination) > 0
@@ -82,7 +82,8 @@ module PdfForms
     # returns the commands output, check general execution success with
     # $?.success?
     def call_pdftk(*args)
-      SafeShell.execute pdftk, *(args.flatten)
+      #SafeShell.execute pdftk, *(args.flatten)
+      %x(#{pdftk} #{args.flatten.join(' ')})
     end
 
     # concatenate documents, can optionally specify page ranges
